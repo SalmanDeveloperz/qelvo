@@ -1,0 +1,27 @@
+name: Bug report
+description: Something in the editor, preview or PDF doesn't work
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what happened instead. Screenshots help a lot.
+    validations: { required: true }
+  - type: input
+    id: layout
+    attributes:
+      label: Layout and page setting
+      placeholder: "Blueprint, 1 page, A4"
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 141 on Windows 11"
+    validations: { required: true }
+  - type: textarea
+    id: source
+    attributes:
+      label: Source (optional)
+      description: The code view text that reproduces it, with personal details replaced.
+      render: latex

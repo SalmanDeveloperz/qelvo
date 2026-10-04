@@ -1,0 +1,33 @@
+name: Import got something wrong
+description: Qelvo read a resume file incorrectly (missing bullets, wrong dates, swapped fields...)
+labels: ["import"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please don't attach a real resume.** Make a copy with fake names, emails, phone numbers, employers and schools, keep the layout, and check it still fails. CONTRIBUTING.md explains how.
+  - type: dropdown
+    id: source
+    attributes:
+      label: How was the file made?
+      options: [Google Docs, Microsoft Word, LaTeX / Overleaf, Canva, Other / not sure]
+    validations: { required: true }
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What came out wrong
+      description: Which section and field, what you expected, what you got.
+      placeholder: "Experience > second job: dates went into the company name. Expected 'Mar 2021 – Present' in Dates."
+    validations: { required: true }
+  - type: textarea
+    id: file
+    attributes:
+      label: Redacted file
+      description: Drag the redacted PDF or DOCX here.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: The attached file contains no real personal information.
+          required: true

@@ -1,0 +1,8 @@
+# Netlify: static build. Resumes are parsed in the visitor's browser; nothing is uploaded.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  VITE_AI_IMPORT = "off"

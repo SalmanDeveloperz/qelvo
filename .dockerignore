@@ -1,0 +1,7 @@
+node_modules
+dist
+out
+fixtures
+tests/corpus
+.env
+*.log
