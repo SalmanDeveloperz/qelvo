@@ -1,31 +1,35 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { TemplateId } from "../model/types";
-import { drawPage, openPdf, samplePdf } from "./pdf";
+import { THUMB_RATIO, THUMB_WIDTHS } from "./thumbs.gen";
 
-/** A live-rendered first page of a template's showcase sample (Letter or A4, whichever it uses). */
-export function Thumb({ id, width, onReady }: { id: TemplateId; width: number; onReady?: () => void }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const [ready, setReady] = useState(false);
-  const [ratio, setRatio] = useState(792 / 612);
-  useEffect(() => {
-    let dead = false;
-    (async () => {
-      const bytes = await samplePdf(id);
-      const doc = await openPdf(bytes);
-      if (dead || !ref.current) return;
-      await drawPage(doc, 0, ref.current, width, 1.25);
-      if (dead) return;
-      setRatio(ref.current.height / ref.current.width);
-      setReady(true);
-      onReady?.();
-    })().catch(() => {});
-    return () => { dead = true; };
-  }, [id, width]);
+/**
+ * A template's showcase page, pre-rendered by `npm run thumbs` (scripts/thumbs.ts). Static
+ * images mean the landing and setup pages never load the typesetter or pdf.js.
+ */
+export function Thumb({ id, width, onReady, priority, lazy }: {
+  id: TemplateId; width: number; onReady?: () => void; priority?: boolean; lazy?: boolean;
+}) {
+  const ref = useRef<HTMLImageElement>(null);
+  // Report ready only once decoded, so a cross-fade never reveals a half-painted page.
+  const ready = (img: HTMLImageElement) => { if (onReady) void img.decode().then(onReady, onReady); };
+  // A cached image can finish before React attaches onLoad.
+  useEffect(() => { const img = ref.current; if (img?.complete && img.naturalWidth) ready(img); }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const src = (w: number) => `/thumbs/${id}-${w}.webp`;
   return (
-    <canvas
+    <img
       ref={ref}
-      style={{ width, height: width * ratio, opacity: ready ? 1 : 0, transition: "opacity .4s", background: "#fff" }}
-      aria-label={`${id} template preview`}
+      src={src(THUMB_WIDTHS[0])}
+      srcSet={THUMB_WIDTHS.map((w) => `${src(w)} ${w}w`).join(", ")}
+      sizes={`${width}px`}
+      width={width}
+      height={Math.round(width * THUMB_RATIO[id])}
+      alt={`${id} template preview`}
+      decoding="async"
+      loading={lazy ? "lazy" : "eager"}
+      fetchPriority={priority ? "high" : "auto"}
+      onLoad={(e) => ready(e.currentTarget)}
+      draggable={false}
+      style={{ display: "block", width, height: "auto", background: "#fff" }}
     />
   );
 }

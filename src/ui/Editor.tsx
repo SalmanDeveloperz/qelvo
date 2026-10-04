@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Compiler, type CompileResult } from "../engine/client";
+import { sharedCompiler, type CompileResult } from "../engine/client";
 import { TEMPLATE_META as TEMPLATES } from "../engine/meta";
 import { lint } from "../model/lint";
 import type { PageTarget, Paper, TemplateId } from "../model/types";
@@ -32,12 +32,15 @@ export function Editor() {
   const [toast, setToast] = useState<string | null>(null);
   const [problemsOpen, setProblemsOpen] = useState(true);
   const codeRef = useRef<CodeHandle>(null);
-  const compiler = useMemo(() => new Compiler(), []);
-  useEffect(() => () => compiler.dispose(), [compiler]);
+  // Shared and never disposed: setup warms it up, and an idle worker costs nothing.
+  const compiler = useMemo(() => sharedCompiler(), []);
 
-  // Live compile, debounced lightly: layout itself takes a few ms.
+  // Live compile, debounced lightly while typing; the first one runs straight away.
+  const first = useRef(true);
   useEffect(() => {
     setBusy(true);
+    const delay = first.current ? 0 : 90;
+    first.current = false;
     const t = setTimeout(() => {
       compiler.compile(resume).then((r) => {
         if (!r) return;
@@ -45,7 +48,7 @@ export function Editor() {
         setCompileError(null);
         setBusy(false);
       }).catch((e: Error) => { setCompileError(e.message); setBusy(false); });
-    }, 90);
+    }, delay);
     return () => clearTimeout(t);
   }, [resume, compiler]);
 

@@ -9,6 +9,8 @@ import { IChevron, ICopy, IDown, ILink, IPlus, ITrash, IUp, IX } from "./icons";
 
 type Focus = (path: string | null) => void;
 
+const AUTO_SIZE = typeof CSS !== "undefined" && CSS.supports?.("field-sizing", "content");
+
 // ── Primitive field ───────────────────────────────────────────────────
 
 function Field({ path, value, label, placeholder, multiline, className, onFocus, mono }: {
@@ -17,7 +19,8 @@ function Field({ path, value, label, placeholder, multiline, className, onFocus,
   const ref = useRef<HTMLTextAreaElement>(null);
   useLayoutEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    // CSS sizes it where supported; measuring every textarea in JS forces a layout per field.
+    if (!el || AUTO_SIZE) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight + 2}px`;
   }, [value]);

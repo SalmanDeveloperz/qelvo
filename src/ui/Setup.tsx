@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TEMPLATE_META as TEMPLATES } from "../engine/meta";
 import { contact, emptyResume, entry, section, skill } from "../model/factory";
 import { SAMPLES } from "../model/samples";
@@ -10,6 +10,7 @@ import { IArrowLeft, IArrowRight, ICheck, IFile, IPen, ISpark, IUpload, IWarn, W
 import { SITE } from "../site";
 import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
+import { warmEditor } from "./warm";
 
 let preset: TemplateId | null = null;
 /** Landing → Setup with a layout already chosen (the user clicked it in the gallery). */
@@ -24,6 +25,8 @@ export function Setup() {
   const [pages, setPages] = useState<PageTarget>(1);
   const [paper, setPaper] = useState<Paper>("letter");
 
+  // The editor is a couple of clicks away: get its code, the typesetter and this layout's fonts ready.
+  useEffect(() => warmEditor(template, pages, paper), [template, pages, paper]);
   const steps = ["Layout", "Length", "Content"];
   return (
     <div>

@@ -166,7 +166,7 @@ a { color: inherit; }
   overflow: hidden; opacity: 0; transform: translateY(8px) scale(.985); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1);
 }
 .desk .sheet.on { opacity: 1; transform: none; }
-.desk .sheet canvas { display: block; width: 100% !important; height: auto !important; }
+.desk .sheet img { display: block; width: 100% !important; height: auto !important; }
 .desk .s1 { width: 50%; left: 0; top: 13%; transform: rotate(-6deg); }
 .desk .s2 { width: 50%; right: 0; top: 9%; transform: rotate(5deg); }
 .desk .s3 { width: 60%; left: 20%; top: 0; z-index: 2; }
@@ -217,7 +217,7 @@ a { color: inherit; }
 .tcard.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 18px 40px -20px color-mix(in srgb, var(--accent) 35%, transparent); }
 .tcard .shot { background: linear-gradient(180deg, var(--panel-2), var(--panel)); padding: 22px 26px 0; height: 330px; overflow: hidden; position: relative; }
 .tcard .shot .paper { background: var(--paper); border-radius: 2px 2px 0 0; box-shadow: var(--shadow-paper); }
-.tcard .shot canvas { display: block; width: 100%; height: auto; }
+.tcard .shot img { display: block; max-width: 100%; height: auto; }
 .tcard .meta { padding: 16px 18px 18px; border-top: 1px solid var(--line); }
 .tcard .meta h3 { margin: 0; font-size: 15.5px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
 .tcard .meta p { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
@@ -291,7 +291,7 @@ a { color: inherit; }
 .input::placeholder, .textarea::placeholder { color: var(--faint); }
 .input:hover, .textarea:hover, .select:hover { border-color: var(--line-2); }
 .input:focus, .textarea:focus, .select:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 70%, transparent); background: var(--bg); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
-.textarea { resize: none; overflow: hidden; display: block; }
+.textarea { resize: none; overflow: hidden; display: block; field-sizing: content; min-height: 36px; }
 .select { appearance: none; padding-right: 26px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 13px) 50%, calc(100% - 9px) 50%; background-size: 4px 4px; background-repeat: no-repeat; cursor: pointer; }
 .input.name { font: 400 26px/1.15 var(--serif); padding: 8px 12px; }
 .flash { animation: flash 1.2s ease-out; }
@@ -490,7 +490,7 @@ a { color: inherit; }
 .gshot { height: 290px; overflow: hidden; padding: 20px 20px 0; display: flex; justify-content: center; background: linear-gradient(180deg, var(--panel-2), var(--panel)); }
 .gshot .paper { background: #fff; box-shadow: var(--shadow-paper); border-radius: 2px 2px 0 0; transition: transform .35s cubic-bezier(.2,.8,.2,1); transform-origin: top center; }
 .gcard:hover .gshot .paper { transform: scale(1.03); }
-.gshot canvas { display: block; max-width: 100%; }
+.gshot img { display: block; max-width: 100%; height: auto !important; }
 .gmeta { padding: 14px 16px 16px; border-top: 1px solid var(--line); }
 .gmeta h3 { margin: 0; font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
 .gmeta .go { display: inline-flex; align-items: center; gap: 4px; font: 500 12px var(--sans); color: var(--accent); opacity: 0; transform: translateX(-6px); transition: opacity .2s, transform .2s; }

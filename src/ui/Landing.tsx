@@ -8,6 +8,7 @@ import { presetTemplate } from "./Setup";
 import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
 import { useTypewriter } from "./Typewriter";
+import { warmCode, warmWhenIdle } from "./warm";
 
 const GALLERY: TemplateId[] = ["modern", "blueprint", "classic", "academic"];
 
@@ -27,7 +28,7 @@ const DESK_ORDER: TemplateId[] = ["classic", "blueprint", "academic", "modern"];
  * cross-fade. The next layout renders ahead of time, and the current sheet stays up until
  * the new one is actually drawn.
  */
-function SheetStack({ active, next, width, className }: { active: TemplateId; next: TemplateId; width: number; className: string }) {
+function SheetStack({ active, next, width, className, priority }: { active: TemplateId; next: TemplateId; width: number; className: string; priority?: boolean }) {
   const [seen, setSeen] = useState<TemplateId[]>([active]);
   const [ready, setReady] = useState<TemplateId[]>([]);
   const [shown, setShown] = useState<TemplateId>(active);
@@ -37,7 +38,7 @@ function SheetStack({ active, next, width, className }: { active: TemplateId; ne
     <div className={`sheet-slot ${className}`}>
       {seen.map((id) => (
         <div key={id} className={`sheet ${id === shown ? "on" : ""}`}>
-          <Thumb id={id} width={width} onReady={() => setReady((r) => (r.includes(id) ? r : [...r, id]))} />
+          <Thumb id={id} width={width} priority={priority && id === active} onReady={() => setReady((r) => (r.includes(id) ? r : [...r, id]))} />
         </div>
       ))}
     </div>
@@ -51,6 +52,7 @@ export function Landing() {
   const sides = (id: TemplateId) => DESK_ORDER.filter((x) => x !== id);
   const [left, right] = sides(front);
   const [nextLeft, nextRight] = sides(upcoming);
+  useEffect(warmWhenIdle, []);
   const start = (id?: TemplateId) => { if (id) presetTemplate(id); store.go("setup"); };
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
@@ -66,7 +68,7 @@ export function Landing() {
           </div>
           <div className="nav-right">
             <ThemePicker />
-            <button className="btn primary" onClick={() => start()}>Open the editor</button>
+            <button className="btn primary" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Open the editor</button>
           </div>
         </nav>
       </div>
@@ -74,7 +76,6 @@ export function Landing() {
       <header className="hero">
         <div className="hero-copy">
           <h2 className="typer" aria-label={LINES[0].text}>
-            <span className="hash" aria-hidden>##</span>
             <span aria-hidden>{typed.text}</span>
             <span className="caret" aria-hidden />
           </h2>
@@ -85,7 +86,7 @@ export function Landing() {
             Edit it like code or like a form.
           </p>
           <div className="ctas">
-            <button className="btn primary lg" onClick={() => start()}>Build my resume <IArrowRight /></button>
+            <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Build my resume <IArrowRight /></button>
             <button className="btn lg" onClick={() => jump("layouts")}>See the layouts</button>
           </div>
           <div className="promise">
@@ -97,7 +98,7 @@ export function Landing() {
         <div className="desk" aria-hidden>
           <SheetStack className="s1" active={left} next={nextLeft} width={330} />
           <SheetStack className="s2" active={right} next={nextRight} width={330} />
-          <SheetStack className="s3" active={front} next={upcoming} width={370} />
+          <SheetStack className="s3" active={front} next={upcoming} width={370} priority />
           <div className="measure"><b>{TEMPLATE_META[front].name}</b> · typeset live in your browser</div>
         </div>
       </header>
@@ -111,7 +112,7 @@ export function Landing() {
           <div className="gallery">
             {GALLERY.map((id, i) => (
               <button key={id} className="gcard" onClick={() => start(id)} style={{ animationDelay: `${i * 70}ms` }}>
-                <div className="gshot"><div className="paper"><Thumb id={id} width={250} /></div></div>
+                <div className="gshot"><div className="paper"><Thumb id={id} width={250} lazy /></div></div>
                 <div className="gmeta">
                   <h3>{TEMPLATE_META[id].name}<span className="go">Use this <IArrowRight size={14} /></span></h3>
                   <p>{TEMPLATE_META[id].tagline}</p>
@@ -175,7 +176,7 @@ export function Landing() {
           </div>
           <div className="closer">
             <h2>Start with the resume you already have.</h2>
-            <button className="btn primary lg" onClick={() => start()}>Build my resume <IArrowRight /></button>
+            <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Build my resume <IArrowRight /></button>
           </div>
         </div>
       </section>

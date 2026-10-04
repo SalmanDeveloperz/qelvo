@@ -13,7 +13,8 @@
     "calibrate": "tsx scripts/calibrate.ts",
     "test": "tsx scripts/roundtrip.ts && tsx scripts/parse-errors.ts && tsx tests/unit.test.ts && tsx tests/import.test.ts",
     "test:import": "tsx tests/import.test.ts",
-    "test:corpus": "python tests/gen_corpus.py && tsx tests/import.test.ts"
+    "test:corpus": "python tests/gen_corpus.py && tsx tests/import.test.ts",
+    "thumbs": "tsx scripts/thumbs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

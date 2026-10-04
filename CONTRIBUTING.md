@@ -99,7 +99,7 @@ Then iterate with `npx tsx tests/import.test.ts <name> -v` until it passes, and 
 
 1. Create `src/engine/templates/<id>.ts` exporting `layout<Id>(resume, book, density)` and its font list. `modern.ts` is the clearest example. Vertical rhythm is a table of baseline-to-baseline gaps between kinds of lines; keep it that way so the layout stays strict.
 2. Register it in `src/engine/index.ts` and `src/engine/meta.ts`, add the id to `TemplateId` in `src/model/types.ts`, and accept it in `src/source/latex.ts`.
-3. Add a showcase sample in `src/model/samples.ts` so the gallery can render it.
+3. Add a showcase sample in `src/model/samples.ts`, then run `npm run thumbs` to pre-render its gallery preview into `public/thumbs/`. The landing page shows these images instead of compiling anything, which is why it loads instantly. Rerun it whenever a layout or showcase sample changes.
 4. If you're copying an existing design, put the reference PDF in `fixtures/`, add the pair to `scripts/calibrate.ts`, and report the worst baseline error in the PR.
 5. Fonts must be licensed for redistribution (OFL or similar). Subset them like the others and add them to [NOTICE.md](NOTICE.md).
 

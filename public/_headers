@@ -1,8 +1,10 @@
-# Netlify and Cloudflare Pages: hashed bundles never change; fonts rarely do.
+# Netlify and Cloudflare Pages: hashed bundles never change; fonts and previews rarely do.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 /fonts/*
   Cache-Control: public, max-age=2592000
+/thumbs/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

@@ -1,6 +1,3 @@
-import { Compiler, type CompileResult } from "../engine/client";
-import type { Resume, TemplateId } from "../model/types";
-import { SAMPLES } from "../model/samples";
 
 type PdfJs = typeof import("../import/pdfjs");
 let pdfjsP: Promise<PdfJs> | null = null;
@@ -32,24 +29,6 @@ export async function openPdf(bytes: Uint8Array) {
   const pdfjs = await loadPdfJs();
   // pdf.js takes ownership of the buffer; hand it a copy.
   return pdfjs.getDocument({ data: bytes.slice() }).promise;
-}
-
-// ── Gallery thumbnails: compiled live from the calibration samples ──
-const thumbCache = new Map<string, Promise<Uint8Array>>();
-export function samplePdf(id: TemplateId, tweak?: (r: Resume) => Resume): Promise<Uint8Array> {
-  const key = id + (tweak ? "*" : "");
-  let p = thumbCache.get(key);
-  if (!p) {
-    const c = new Compiler();
-    const r = (tweak ?? ((x) => x))(SAMPLES[id]());
-    p = c.compile(r).then((res: CompileResult | null) => {
-      c.dispose();
-      if (!res) throw new Error("superseded");
-      return res.pdf;
-    });
-    thumbCache.set(key, p);
-  }
-  return p;
 }
 
 export function download(bytes: Uint8Array | string, filename: string, type: string) {

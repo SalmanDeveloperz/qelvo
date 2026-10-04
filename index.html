@@ -8,6 +8,8 @@
     <meta name="description" content="Free, open source resume builder. Upload the resume you have, pick a calibrated layout, edit it like code or like a form, and download the exact PDF you see. No sign-up, no watermark." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- The hero's front page: start fetching it alongside the JS, not after it runs. -->
+    <link rel="preload" as="image" href="/thumbs/modern-500.webp" imagesrcset="/thumbs/modern-500.webp 500w, /thumbs/modern-760.webp 760w" imagesizes="370px" fetchpriority="high" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Qelvo" />
     <meta property="og:title" content="Qelvo · Typeset, not templated" />
