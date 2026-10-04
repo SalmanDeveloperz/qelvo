@@ -122,4 +122,4 @@ Bug reports, import failures, new layouts and docs fixes are all welcome. Start 
 
 Qelvo is [MIT licensed](LICENSE). Fonts and icons keep their own licences (OFL, GUST, CC BY 4.0), listed in [NOTICE.md](NOTICE.md).
 
-Made by [Muhammad Salman](https://github.com/SalmanDeveloperz) and [contributors](https://github.com/SalmanDeveloperz/qelvo/graphs/contributors). Follow along on [LinkedIn](https://www.linkedin.com/company/qelvo/).
+Made by [Muhammad Salman](https://github.com/SalmanDeveloperz) and [contributors](https://github.com/SalmanDeveloperz/qelvo/graphs/contributors). Follow along on [LinkedIn](https://www.linkedin.com/in/msalman199).

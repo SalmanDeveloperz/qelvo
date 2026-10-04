@@ -18,6 +18,6 @@ Harassment, insults, personal or political attacks, sexualised language or image
 
 Maintainers may remove comments, commits, issues and other contributions that break this code, and may temporarily or permanently ban anyone who does so, in any Qelvo space: the repository, discussions, and our social channels.
 
-To report something, contact a maintainer privately: message [@SalmanDeveloperz](https://github.com/SalmanDeveloperz) on GitHub or [Qelvo on LinkedIn](https://www.linkedin.com/company/qelvo/). Reports are kept confidential.
+To report something, contact a maintainer privately: message [@SalmanDeveloperz](https://github.com/SalmanDeveloperz) on GitHub or [Qelvo on LinkedIn](https://www.linkedin.com/in/msalman199/). Reports are kept confidential.
 
 This code is inspired by the [Contributor Covenant](https://www.contributor-covenant.org/).

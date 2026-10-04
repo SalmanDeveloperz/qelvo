@@ -4,7 +4,7 @@ export const SITE = {
   tagline: "Typeset, not templated",
   /** Public source repository. Leave empty until it exists; the UI hides the link. */
   repo: "https://github.com/SalmanDeveloperz/qelvo",
-  linkedin: "https://www.linkedin.com/company/qelvo/",
+  linkedin: "https://www.linkedin.com/in/msalman199/",
   /**
    * AI import needs the Node server (server/index.ts) and an Anthropic key. Static hosts
    * build with VITE_AI_IMPORT=off: files are then parsed only in the browser and never uploaded.
