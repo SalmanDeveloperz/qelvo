@@ -14,7 +14,7 @@ If you're new here, good first contributions are import failures (a resume Qelvo
 ## Setting up
 
 ```bash
-git clone https://github.com/qelvo/qelvo.git
+git clone https://github.com/SalmanDeveloperz/qelvo.git
 cd qelvo
 npm install
 npm run dev          # web on :5173, API on :8787
@@ -109,4 +109,4 @@ Qelvo is MIT licensed. By opening a pull request you agree that your contributio
 
 ## Getting help
 
-Questions go in [GitHub Discussions](https://github.com/qelvo/qelvo/discussions) or on an issue. For security problems, use [SECURITY.md](SECURITY.md) instead. Please keep things kind; see the [Code of Conduct](CODE_OF_CONDUCT.md).
+Questions go in [GitHub Discussions](https://github.com/SalmanDeveloperz/qelvo/discussions) or on an issue. For security problems, use [SECURITY.md](SECURITY.md) instead. Please keep things kind; see the [Code of Conduct](CODE_OF_CONDUCT.md).

@@ -5,7 +5,7 @@ Qelvo handles resumes, which means names, phone numbers, addresses and work hist
 ## Reporting a vulnerability
 
 Please **don't open a public issue**. Report it privately through GitHub:
-[Report a vulnerability](https://github.com/qelvo/qelvo/security/advisories/new).
+[Report a vulnerability](https://github.com/SalmanDeveloperz/qelvo/security/advisories/new).
 
 Include what you found, how to reproduce it, and what an attacker could do with it. If you have a fix in mind, mention it, but there's no need to send a patch.
 

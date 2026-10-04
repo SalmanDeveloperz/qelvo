@@ -34,7 +34,7 @@ Goal: the resume builder people trust with their career history. Every import is
 5. Import review screen: side-by-side original vs parsed, with low-confidence fields highlighted (the parser can expose per-field confidence).
 
 ### Launch checklist
-1. ~~Name~~: Qelvo. ~~Licence~~: MIT. ~~Repo~~: github.com/qelvo/qelvo. Brand kit in `brand/` (`npx tsx scripts/brand.ts && python scripts/brand_png.py`).
+1. ~~Name~~: Qelvo. ~~Licence~~: MIT. ~~Repo~~: github.com/SalmanDeveloperz/qelvo. Brand kit in `brand/` (`npx tsx scripts/brand.ts && python scripts/brand_png.py`).
 2. Deploy the static build (Vercel or Netlify) from qelvo/qelvo and set the URL in the repo's About box.
 3. Buy the domain, point it at the host, and update `og:image` to an absolute URL on that domain.
 4. In GitHub settings: enable Discussions, private vulnerability reporting, and upload `brand/qelvo-github-social.png` as the social preview.

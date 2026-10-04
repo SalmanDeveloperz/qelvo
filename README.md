@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qelvo/qelvo/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/qelvo/qelvo/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/SalmanDeveloperz/qelvo/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/SalmanDeveloperz/qelvo/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-ffb547"></a>
   <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-5fd39e"></a>
 </p>
@@ -36,7 +36,7 @@ You can bring the resume you already have. Qelvo reads PDF, DOCX or plain text, 
 You need Node.js 20 or newer.
 
 ```bash
-git clone https://github.com/qelvo/qelvo.git
+git clone https://github.com/SalmanDeveloperz/qelvo.git
 cd qelvo
 npm install
 npm run dev
@@ -122,4 +122,4 @@ Bug reports, import failures, new layouts and docs fixes are all welcome. Start 
 
 Qelvo is [MIT licensed](LICENSE). Fonts and icons keep their own licences (OFL, GUST, CC BY 4.0), listed in [NOTICE.md](NOTICE.md).
 
-Made by [Muhammad Salman](https://github.com/SalmanDeveloperz) and [contributors](https://github.com/qelvo/qelvo/graphs/contributors). Follow along on [LinkedIn](https://www.linkedin.com/company/qelvo/).
+Made by [Muhammad Salman](https://github.com/SalmanDeveloperz) and [contributors](https://github.com/SalmanDeveloperz/qelvo/graphs/contributors). Follow along on [LinkedIn](https://www.linkedin.com/company/qelvo/).

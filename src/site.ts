@@ -3,7 +3,7 @@ export const SITE = {
   name: "Qelvo",
   tagline: "Typeset, not templated",
   /** Public source repository. Leave empty until it exists; the UI hides the link. */
-  repo: "https://github.com/qelvo/qelvo",
+  repo: "https://github.com/SalmanDeveloperz/qelvo",
   linkedin: "https://www.linkedin.com/company/qelvo/",
   /**
    * AI import needs the Node server (server/index.ts) and an Anthropic key. Static hosts

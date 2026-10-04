@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Question or idea
-    url: https://github.com/qelvo/qelvo/discussions
+    url: https://github.com/SalmanDeveloperz/qelvo/discussions
     about: Ask, share a layout idea, or show what you built.
   - name: Security vulnerability
-    url: https://github.com/qelvo/qelvo/security/advisories/new
+    url: https://github.com/SalmanDeveloperz/qelvo/security/advisories/new
     about: Please report security problems privately.
