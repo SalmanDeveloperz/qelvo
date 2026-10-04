@@ -5,6 +5,12 @@ export const SITE = {
   /** Public source repository. Leave empty until it exists; the UI hides the link. */
   repo: "https://github.com/SalmanDeveloperz/qelvo",
   linkedin: "https://www.linkedin.com/in/msalman199/",
+  author: {
+    name: "Muhammad Salman",
+    github: "https://github.com/SalmanDeveloperz",
+    linkedin: "https://www.linkedin.com/in/msalman199/",
+    twitter: "https://x.com/sam_env",
+  },
   /**
    * AI import needs the Node server (server/index.ts) and an Anthropic key. Static hosts
    * build with VITE_AI_IMPORT=off: files are then parsed only in the browser and never uploaded.

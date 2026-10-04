@@ -5,8 +5,9 @@ import pymupdf
 from PIL import Image
 
 src, dst = sys.argv[1], sys.argv[2]
-# 250-370 CSS px on screen: 500 covers 1x and the 2x gallery, 760 the 2x hero.
-WIDTHS = (500, 760)
+# Shown at 236-370 CSS px. The browser picks whichever width matches its screen density and
+# zoom: 640 for 1x and the 2x gallery, 960 for a 2x hero, 1280/1920 for 3x screens or zooming in.
+WIDTHS = (640, 960, 1280, 1920)
 ratios = {}
 for f in sorted(os.listdir(src)):
     if not f.endswith(".pdf"):
@@ -18,8 +19,7 @@ for f in sorted(os.listdir(src)):
         z = w / page.rect.width
         pix = page.get_pixmap(matrix=pymupdf.Matrix(z, z), alpha=False)
         img = Image.open(io.BytesIO(pix.tobytes("png"))).convert("RGB")
-        # A resume page has a handful of colours: a 16-colour palette, stored losslessly, is
-        # pixel-sharp and about a third the size of lossy WebP at the same width.
-        img = img.quantize(16, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert("RGB")
+        # Lossless, full colour: small text keeps its anti-aliasing, so it reads sharp. (A reduced
+        # palette was smaller but stripped the edge greys and made text look soft.)
         img.save(os.path.join(dst, f"{tid}-{w}.webp"), "WEBP", lossless=True, quality=100, method=6)
 print(json.dumps(ratios))

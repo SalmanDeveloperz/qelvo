@@ -3,4 +3,4 @@ import type { TemplateId } from "../model/types";
 /** Page aspect (height / width) of each pre-rendered preview. */
 export const THUMB_RATIO: Record<TemplateId, number> = {"academic":1.29412,"blueprint":1.29412,"classic":1.29412,"modern":1.29412};
 /** Widths available in public/thumbs/<id>-<w>.webp */
-export const THUMB_WIDTHS = [500, 760] as const;
+export const THUMB_WIDTHS = [640, 960, 1280, 1920] as const;

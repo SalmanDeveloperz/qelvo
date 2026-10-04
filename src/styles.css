@@ -515,8 +515,6 @@ a { color: inherit; }
 .closer { margin-top: 64px; padding: 40px; border-radius: 18px; border: 1px solid var(--line-2); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   background: linear-gradient(120deg, var(--accent-wash), transparent 60%), var(--panel); }
 .closer h2 { margin: 0; }
-.foot a { color: var(--muted); text-decoration: none; }
-.foot a:hover { color: var(--accent); }
 
 .cards { grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .tcard .shot { height: 300px; padding: 20px 20px 0; display: flex; justify-content: center; }
@@ -576,3 +574,19 @@ a { color: inherit; }
 @keyframes vibe-in { from { opacity: 0; transform: translateY(-8px) scale(.5) rotate(-8deg); } to { opacity: 1; transform: none; } }
 @keyframes vibe-out { to { opacity: 0; transform: translateY(-6px) scale(.92); } }
 @keyframes spark { from { transform: scale(0) rotate(-90deg); } to { transform: none; } }
+
+/* Footer */
+.foot { align-items: center; border-top: 1px solid var(--line); max-width: none; padding: 18px max(28px, calc((100% - 1144px) / 2)); font-size: 13px; color: var(--muted); }
+.foot-left, .foot-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.foot .dot { color: var(--faint); }
+.foot a { color: var(--text-2); text-decoration: none; transition: color .15s; }
+.foot a:hover { color: var(--accent); }
+.foot-right { gap: 4px; }
+.foot-right a:not(.foot-text) { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; color: var(--muted); }
+.foot-right a:not(.foot-text):hover { color: var(--text); background: var(--panel-2); }
+.foot-text { margin-right: 10px; font-size: 12.5px; color: var(--faint) !important; }
+.foot-text:hover { color: var(--accent) !important; }
+.heart { color: #ff4d6d; display: inline-block; }
+.foot-left:hover .heart { animation: beat .8s ease-in-out infinite; }
+@keyframes beat { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.25); } 60% { transform: scale(.95); } }
+@media (max-width: 560px) { .foot { justify-content: center; text-align: center; } .foot-left, .foot-right { justify-content: center; } }

@@ -3,7 +3,7 @@ import { TEMPLATE_META } from "../engine/meta";
 import type { TemplateId } from "../model/types";
 import { SITE } from "../site";
 import { store } from "../state";
-import { ICheck, IArrowRight, IGitHub, Wordmark } from "./icons";
+import { ICheck, IArrowRight, IGitHub, ILinkedIn, IXTwitter, Wordmark } from "./icons";
 import { presetTemplate } from "./Setup";
 import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
@@ -15,10 +15,11 @@ const GALLERY: TemplateId[] = ["modern", "blueprint", "classic", "academic"];
 /** The hero's typed line. Each one brings its layout to the front of the desk. */
 const LINES: { text: string; id: TemplateId }[] = [
   { text: "Your next resume is two minutes away.", id: "modern" },
-  { text: "Blueprint: small caps, sharp rules.", id: "blueprint" },
-  { text: "Classic TeX, the one recruiters trust.", id: "classic" },
-  { text: "Two-Column TeX, dense but calm.", id: "academic" },
-  { text: "Modern Sans, clean and geometric.", id: "modern" },
+  // Parked for later: one line per layout, each bringing its layout to the front.
+  // { text: "Blueprint: small caps, sharp rules.", id: "blueprint" },
+  // { text: "Classic TeX, the one recruiters trust.", id: "classic" },
+  // { text: "Two-Column TeX, dense but calm.", id: "academic" },
+  // { text: "Modern Sans, clean and geometric.", id: "modern" },
 ];
 const LINE_TEXT = LINES.map((l) => l.text);
 const DESK_ORDER: TemplateId[] = ["classic", "blueprint", "academic", "modern"];
@@ -182,8 +183,17 @@ export function Landing() {
       </section>
 
       <footer className="foot">
-        <span>Open source. Fonts: Poppins and Source Sans (OFL), Latin Modern (GUST). Icons: Font Awesome Free (CC BY 4.0).</span>
-        {SITE.repo ? <a className="mono" href={SITE.repo} target="_blank" rel="noreferrer">source on GitHub</a> : <span className="mono">built by engineers who rewrote their resume one too many times</span>}
+        <div className="foot-left">
+          <span>© 2026 {SITE.name}</span>
+          <span className="dot" aria-hidden>·</span>
+          <span>Made with <span className="heart" role="img" aria-label="love">❤</span> by <a href={SITE.author.github} target="_blank" rel="noreferrer">{SITE.author.name}</a></span>
+        </div>
+        <div className="foot-right">
+          <a href={`${SITE.repo}/blob/main/NOTICE.md`} target="_blank" rel="noreferrer" className="foot-text">Open source · licences</a>
+          <a href={SITE.author.github} target="_blank" rel="noreferrer" aria-label="GitHub: SalmanDeveloperz" title="SalmanDeveloperz"><IGitHub size={16} /></a>
+          <a href={SITE.author.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn: msalman199" title="msalman199"><ILinkedIn size={16} /></a>
+          <a href={SITE.author.twitter} target="_blank" rel="noreferrer" aria-label="X: sam_env" title="sam_env"><IXTwitter size={15} /></a>
+        </div>
       </footer>
     </div>
   );
