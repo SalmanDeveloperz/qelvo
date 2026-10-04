@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { TEMPLATE_META } from "../engine/meta";
 import type { TemplateId } from "../model/types";
 import { SITE } from "../site";
@@ -6,10 +7,50 @@ import { ICheck, IArrowRight, IGitHub, Wordmark } from "./icons";
 import { presetTemplate } from "./Setup";
 import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
+import { useTypewriter } from "./Typewriter";
 
 const GALLERY: TemplateId[] = ["modern", "blueprint", "classic", "academic"];
 
+/** The hero's typed line. Each one brings its layout to the front of the desk. */
+const LINES: { text: string; id: TemplateId }[] = [
+  { text: "Your next resume is two minutes away.", id: "modern" },
+  { text: "Blueprint: small caps, sharp rules.", id: "blueprint" },
+  { text: "Classic TeX, the one recruiters trust.", id: "classic" },
+  { text: "Two-Column TeX, dense but calm.", id: "academic" },
+  { text: "Modern Sans, clean and geometric.", id: "modern" },
+];
+const LINE_TEXT = LINES.map((l) => l.text);
+const DESK_ORDER: TemplateId[] = ["classic", "blueprint", "academic", "modern"];
+
+/**
+ * Sheets for one desk slot, stacked. Each layout renders once and is kept, so switching is a
+ * cross-fade. The next layout renders ahead of time, and the current sheet stays up until
+ * the new one is actually drawn.
+ */
+function SheetStack({ active, next, width, className }: { active: TemplateId; next: TemplateId; width: number; className: string }) {
+  const [seen, setSeen] = useState<TemplateId[]>([active]);
+  const [ready, setReady] = useState<TemplateId[]>([]);
+  const [shown, setShown] = useState<TemplateId>(active);
+  useEffect(() => setSeen((s) => [...s, ...[active, next].filter((id, i, a) => !s.includes(id) && a.indexOf(id) === i)]), [active, next]);
+  useEffect(() => { if (ready.includes(active)) setShown(active); }, [active, ready]);
+  return (
+    <div className={`sheet-slot ${className}`}>
+      {seen.map((id) => (
+        <div key={id} className={`sheet ${id === shown ? "on" : ""}`}>
+          <Thumb id={id} width={width} onReady={() => setReady((r) => (r.includes(id) ? r : [...r, id]))} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function Landing() {
+  const typed = useTypewriter(LINE_TEXT);
+  const front = LINES[typed.line].id;
+  const upcoming = LINES[(typed.line + 1) % LINES.length].id;
+  const sides = (id: TemplateId) => DESK_ORDER.filter((x) => x !== id);
+  const [left, right] = sides(front);
+  const [nextLeft, nextRight] = sides(upcoming);
   const start = (id?: TemplateId) => { if (id) presetTemplate(id); store.go("setup"); };
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
@@ -32,6 +73,11 @@ export function Landing() {
 
       <header className="hero">
         <div className="hero-copy">
+          <h2 className="typer" aria-label={LINES[0].text}>
+            <span className="hash" aria-hidden>##</span>
+            <span aria-hidden>{typed.text}</span>
+            <span className="caret" aria-hidden />
+          </h2>
           <h1>Typeset,<br /><em>not templated.</em></h1>
           <p className="lede">
             Drop in the resume you already have, pick a layout, and download the exact PDF you see.
@@ -49,10 +95,10 @@ export function Landing() {
           </div>
         </div>
         <div className="desk" aria-hidden>
-          <div className="sheet s1"><Thumb id="classic" width={330} /></div>
-          <div className="sheet s2"><Thumb id="blueprint" width={330} /></div>
-          <div className="sheet s3"><Thumb id="modern" width={370} /></div>
-          <div className="measure">Modern vs. its original: <b>0.01 pt</b> baseline drift</div>
+          <SheetStack className="s1" active={left} next={nextLeft} width={330} />
+          <SheetStack className="s2" active={right} next={nextRight} width={330} />
+          <SheetStack className="s3" active={front} next={upcoming} width={370} />
+          <div className="measure"><b>{TEMPLATE_META[front].name}</b> · typeset live in your browser</div>
         </div>
       </header>
 
@@ -128,7 +174,7 @@ export function Landing() {
             <div className="truth"><div className="q">Squeeze everything onto one page</div><div className="a">Spacing tightens by up to 16%, type by up to 6%, and no further. Past that, it tells you what to cut.</div></div>
           </div>
           <div className="closer">
-            <h2>Your next resume is two minutes away.</h2>
+            <h2>Start with the resume you already have.</h2>
             <button className="btn primary lg" onClick={() => start()}>Build my resume <IArrowRight /></button>
           </div>
         </div>

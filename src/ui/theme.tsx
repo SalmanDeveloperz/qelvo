@@ -12,6 +12,15 @@ export const THEMES: { id: ThemeId; label: string; swatch: [string, string] }[] 
 
 const KEY = "qelvo-theme";
 
+/** One line of personality when you switch. Short enough to read in the second it's up. */
+const VIBES: Record<ThemeId, [string, string]> = {
+  dark: ["dark mode, it's giving focus", "🖤"],
+  light: ["light mode, main character", "☀️"],
+  hacker: ["hacker mode, we're in", "🔴"],
+  ocean: ["ocean mode, zero stress", "🌊"],
+  forest: ["forest mode, touch grass", "🌿"],
+};
+
 /** Stored choice, else the system's light/dark preference. Storage can be unavailable (private mode). */
 export function initialTheme(): ThemeId {
   try {
@@ -32,7 +41,22 @@ export function applyTheme(t: ThemeId) {
 export function ThemePicker() {
   const [theme, setTheme] = useState<ThemeId>(() => (document.documentElement.dataset.theme as ThemeId) || initialTheme());
   const [open, setOpen] = useState(false);
+  const [pop, setPop] = useState<{ id: ThemeId; n: number } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+  const btn = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!pop) return;
+    // Restart the bounce on the same element (re-adding the class after a reflow).
+    const b = btn.current;
+    if (b) { b.classList.remove("boing"); void b.offsetWidth; b.classList.add("boing"); }
+    const t = window.setTimeout(() => setPop(null), 1900);
+    return () => window.clearTimeout(t);
+  }, [pop]);
+  const pick = (id: ThemeId) => {
+    setTheme(id);
+    setOpen(false);
+    setPop((p) => ({ id, n: (p?.n ?? 0) + 1 }));
+  };
   useEffect(() => applyTheme(theme), [theme]);
   useEffect(() => {
     if (!open) return;
@@ -43,16 +67,22 @@ export function ThemePicker() {
   const cur = THEMES.find((t) => t.id === theme)!;
   return (
     <div className="theme-picker" ref={ref}>
-      <button className="theme-btn" onClick={() => setOpen(!open)} title={`Theme: ${cur.label}`} aria-label="Change theme">
+      <button ref={btn} className="theme-btn" onClick={() => setOpen(!open)} title={`Theme: ${cur.label}`} aria-label="Change theme">
         <Swatch s={cur.swatch} />
       </button>
       {open && (
         <div className="theme-menu" role="menu">
           {THEMES.map((t) => (
-            <button key={t.id} role="menuitemradio" aria-checked={t.id === theme} className={t.id === theme ? "on" : ""} onClick={() => { setTheme(t.id); setOpen(false); }}>
+            <button key={t.id} role="menuitemradio" aria-checked={t.id === theme} className={t.id === theme ? "on" : ""} onClick={() => pick(t.id)}>
               <Swatch s={t.swatch} /> {t.label}
             </button>
           ))}
+        </div>
+      )}
+      {pop && !open && (
+        <div key={pop.n} className="theme-pop" role="status">
+          <Swatch s={THEMES.find((t) => t.id === pop.id)!.swatch} />
+          {VIBES[pop.id][0]} <span className="spark">{VIBES[pop.id][1]}</span>
         </div>
       )}
     </div>

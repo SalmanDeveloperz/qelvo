@@ -3,7 +3,7 @@ import type { TemplateId } from "../model/types";
 import { drawPage, openPdf, samplePdf } from "./pdf";
 
 /** A live-rendered first page of a template's showcase sample (Letter or A4, whichever it uses). */
-export function Thumb({ id, width }: { id: TemplateId; width: number }) {
+export function Thumb({ id, width, onReady }: { id: TemplateId; width: number; onReady?: () => void }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
   const [ratio, setRatio] = useState(792 / 612);
@@ -17,6 +17,7 @@ export function Thumb({ id, width }: { id: TemplateId; width: number }) {
       if (dead) return;
       setRatio(ref.current.height / ref.current.width);
       setReady(true);
+      onReady?.();
     })().catch(() => {});
     return () => { dead = true; };
   }, [id, width]);
