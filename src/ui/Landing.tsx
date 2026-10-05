@@ -9,6 +9,8 @@ import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
 import { useTypewriter } from "./Typewriter";
 import { warmCode, warmWhenIdle } from "./warm";
+import { drafts, openDraft } from "../persist/autosave";
+import { ago } from "./Share";
 
 const GALLERY: TemplateId[] = ["modern", "blueprint", "classic", "academic"];
 
@@ -54,6 +56,13 @@ export function Landing() {
   const [left, right] = sides(front);
   const [nextLeft, nextRight] = sides(upcoming);
   useEffect(warmWhenIdle, []);
+  const [recent, setRecent] = useState(() => drafts.list()[0]);
+  const resume = () => {
+    if (recent && openDraft(recent.id)) return;
+    // Gone since the page loaded (site data cleared in another tab).
+    setRecent(drafts.list()[0]);
+    store.notify("That draft isn't in this browser any more.");
+  };
   const start = (id?: TemplateId) => { if (id) presetTemplate(id); store.go("setup"); };
   const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
@@ -90,6 +99,11 @@ export function Landing() {
             <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Build my resume <IArrowRight /></button>
             <button className="btn lg" onClick={() => jump("layouts")}>See the layouts</button>
           </div>
+          {recent && (
+            <button className="continue" onClick={resume} onPointerEnter={warmCode}>
+              <span className="continue-k">Continue</span> <b>{recent.name}</b> <span className="faint">· edited {ago(recent.updated)}</span> <IArrowRight size={14} />
+            </button>
+          )}
           <div className="promise">
             <span><ICheck size={15} /> Free PDF, no watermark</span>
             <span><ICheck size={15} /> No sign-up</span>

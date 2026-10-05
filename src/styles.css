@@ -590,3 +590,47 @@ a { color: inherit; }
 .foot-left:hover .heart { animation: beat .8s ease-in-out infinite; }
 @keyframes beat { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.25); } 60% { transform: scale(.95); } }
 @media (max-width: 560px) { .foot { justify-content: center; text-align: center; } .foot-left, .foot-right { justify-content: center; } }
+
+/* Autosave, share, drafts */
+.save-badge { display: inline-flex; align-items: center; gap: 5px; font: 500 11.5px var(--mono); color: var(--faint); white-space: nowrap; }
+.save-badge.saved svg { color: var(--ok); }
+.save-badge.error, .save-badge.off { color: var(--warn); }
+.save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse .9s ease-in-out infinite; }
+.share-wrap { position: relative; }
+.share-pop, .modal { background: var(--panel-2); border: 1px solid var(--line-2); border-radius: 12px; box-shadow: 0 24px 60px -18px rgba(0,0,0,.6); padding: 14px; }
+.share-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; width: 420px; animation: pop .15s ease-out; }
+.share-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.share-head b { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.share-head b svg { color: var(--ok); }
+.share-row { display: flex; gap: 8px; }
+.share-row .input { font-size: 12px; text-overflow: ellipsis; }
+.share-note { color: var(--muted); font-size: 12.5px; line-height: 1.5; margin: 10px 0 0; }
+.share-warn { color: var(--warn); font-size: 12.5px; margin: 8px 0 0; display: flex; gap: 6px; align-items: center; }
+.share-meta { color: var(--faint); font-size: 11.5px; margin: 8px 0 0; }
+.share-meta a { color: var(--accent); }
+.modal-back { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.45); display: grid; place-items: start center; padding-top: 12vh; animation: pop .15s ease-out; }
+.modal { width: min(520px, calc(100vw - 32px)); }
+.draft-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; max-height: 50vh; overflow: auto; }
+.draft { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); padding-right: 6px; }
+.draft.on { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+.draft-open { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 9px 12px; border: 0; background: transparent; cursor: pointer; text-align: left; }
+.draft-open b { font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.draft-open span { font: 11.5px var(--mono); color: var(--faint); }
+.draft-open:hover b { color: var(--accent); }
+.modal-foot { margin-top: 12px; display: flex; justify-content: flex-end; }
+.toast.notice { max-width: min(560px, calc(100vw - 32px)); cursor: pointer; z-index: 120; }
+.continue { margin-top: 18px; display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--panel); color: var(--text-2); cursor: pointer; font-size: 13px; transition: border-color .15s, color .15s; }
+.continue b { color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.continue:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line-2)); color: var(--text); }
+.continue-k { font: 600 10.5px var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--accent); }
+@media (max-width: 560px) { .share-pop { position: fixed; left: 16px; right: 16px; top: 64px; width: auto; } }
+
+/* Top bar: everything keeps its size except the file name, which truncates first. */
+.topbar > * { flex-shrink: 0; }
+.topbar .file { flex-shrink: 1; min-width: 0; max-width: 300px; overflow: hidden; }
+.topbar .file > :not(svg) { overflow: hidden; text-overflow: ellipsis; }
+.topbar .file { white-space: nowrap; text-overflow: ellipsis; }
+@media (max-width: 1440px) { .st-ms { display: none; } }
+@media (max-width: 1360px) { .share-lbl { display: none; } .share-wrap .btn { padding: 0 11px; } }
+@media (max-width: 1240px) { .save-badge { font-size: 0; gap: 0; } .save-badge svg, .save-badge .save-dot { margin: 0 2px; } }
+@media (max-width: 1160px) { .dl-long { display: none; } }

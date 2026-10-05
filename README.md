@@ -112,7 +112,13 @@ The reference PDFs and some import fixtures are real people's resumes, so they l
 
 ## Privacy
 
-Qelvo has no accounts, no database and no analytics. On the static build, your file is read and typeset inside your browser tab and disappears when you close it. With AI import enabled, the extracted text is sent once to the Anthropic API to be structured and isn't stored by Qelvo.
+Qelvo has no accounts, no database and no analytics. On the static build, your file is read and typeset inside your browser tab. With AI import enabled, the extracted text is sent once to the Anthropic API to be structured and isn't stored by Qelvo.
+
+**Drafts** autosave to your browser's local storage, on your device only, and stay until you clear this site's data. Up to 30 are kept.
+
+**Share links** carry the resume inside the link, after the `#`. Browsers never send that part to a server, so a shared resume never touches Qelvo's hosting or its logs. Whoever opens the link gets their own copy as a new draft; nothing they do changes yours. The link contains your contact details, so share it the way you'd share the PDF.
+
+Everything loaded from a link or from storage is rebuilt field by field from known keys, type-checked and size-capped, and every link that reaches a PDF is limited to `http(s)`, `mailto` and `tel`. Production builds ship a strict Content Security Policy. See [SECURITY.md](SECURITY.md) to report a problem.
 
 ## Contributing
 

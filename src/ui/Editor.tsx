@@ -9,6 +9,7 @@ import { FormPane } from "./FormPane";
 import { PdfView } from "./PdfView";
 import { download, fileBase } from "./pdf";
 import { SITE } from "../site";
+import { DraftsDialog, SaveBadge, ShareButton } from "./Share";
 import { ThemePicker } from "./theme";
 import { ICode, IDots, IDown, IDownload, IFile, IForm, IRedo, IUndo, IUp, IUpload, Logo } from "./icons";
 import { applyMarkup } from "./FormPane";
@@ -52,12 +53,8 @@ export function Editor() {
     return () => clearTimeout(t);
   }, [resume, compiler]);
 
-  // Nothing is saved anywhere: say so before the tab closes.
-  useEffect(() => {
-    const h = (e: BeforeUnloadEvent) => { if (resume.name || resume.sections.some((s) => s.text || s.entries.length)) e.preventDefault(); };
-    window.addEventListener("beforeunload", h);
-    return () => window.removeEventListener("beforeunload", h);
-  }, [resume]);
+  // Drafts autosave (src/persist/autosave.ts), so closing the tab loses nothing; no "are you sure".
+  const [draftsOpen, setDraftsOpen] = useState(false);
 
   const flash = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2600); };
 
@@ -169,8 +166,9 @@ export function Editor() {
   return (
     <div className="editor" style={drag ? { userSelect: "none", cursor: "col-resize" } : undefined}>
       <header className="topbar">
-        <button className="btn ghost sm" style={{ padding: "0 4px" }} onClick={() => confirm("Leave the editor? Nothing is saved.") && store.go("landing")} title="Home"><Logo size={24} /></button>
+        <button className="btn ghost sm" style={{ padding: "0 4px" }} onClick={() => store.go("landing")} title="Home (your draft is saved)"><Logo size={24} /></button>
         <span className="file"><IFile size={14} /> {fileBase(resume.name)}.tex</span>
+        <SaveBadge />
         <span className="sep" />
         <label className="tsel"><span className="lbl">Layout</span>
           <select className="select" style={{ height: 30, width: 160, padding: "0 26px 0 10px", fontSize: 13 }} value={resume.template} onChange={(e) => setMeta({ template: e.target.value as TemplateId })}>
@@ -191,7 +189,7 @@ export function Editor() {
         <span className="grow" />
         <span className={`status ${statusCls}`} title={info ? `layout + PDF in ${info.ms.toFixed(0)} ms` : ""}>
           <i className="led" />
-          {busy ? "compiling" : compileError ? "error" : info ? `${info.pageCount}/${info.target} page${info.target > 1 ? "s" : ""} · ${Math.round(info.lastFill * 100)}% · ${info.ms.toFixed(0)} ms` : "…"}
+          {busy ? "compiling" : compileError ? "error" : info ? <>{`${info.pageCount}/${info.target} page${info.target > 1 ? "s" : ""} · ${Math.round(info.lastFill * 100)}%`}<span className="st-ms">{` · ${info.ms.toFixed(0)} ms`}</span></> : "…"}
         </span>
         <ThemePicker />
         <div className="menu-wrap">
@@ -201,11 +199,13 @@ export function Editor() {
               <button onClick={() => { setMenu(false); download(store.get().code, `${fileBase(resume.name)}.tex`, "text/x-tex"); }}><ICode size={15} /> Download source (.tex)<span className="hint">{SITE.name}</span></button>
               <button onClick={() => { setMenu(false); download(JSON.stringify(store.get().resume, null, 2), `${fileBase(resume.name)}.json`, "application/json"); }}><IFile size={15} /> Download data (.json)</button>
               <hr />
-              <button onClick={() => { setMenu(false); if (confirm("Import another resume? This replaces the current one.")) store.go("setup"); }}><IUpload size={15} /> Import another file…</button>
+              <button onClick={() => { setMenu(false); setDraftsOpen(true); }}><IFile size={15} /> Your drafts…</button>
+              <button onClick={() => { setMenu(false); store.go("setup"); }}><IUpload size={15} /> New or imported resume…<span className="hint">this one stays saved</span></button>
             </div>
           )}
         </div>
-        <button className="btn primary" onClick={downloadPdf} title="Ctrl/⌘ + S"><IDownload size={16} /> Download PDF</button>
+        <ShareButton />
+        <button className="btn primary" onClick={downloadPdf} title="Ctrl/⌘ + S"><IDownload size={16} /> <span className="dl-long">Download </span>PDF</button>
       </header>
 
       <div className="split" ref={split} style={{ gridTemplateColumns: `${leftPct}% 0px 1fr` }}>
@@ -257,6 +257,7 @@ export function Editor() {
         </section>
       </div>
       {toast && <div className="toast">{toast}</div>}
+      {draftsOpen && <DraftsDialog onClose={() => setDraftsOpen(false)} />}
     </div>
   );
 }

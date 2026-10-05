@@ -4,6 +4,7 @@ import { PDFDocument, PDFName, PDFString, rgb, setCharacterSpacing, type PDFFont
 import fontkit from "@pdf-lib/fontkit";
 import { SHAPING, type FontBook, type FontKey, type Shaping } from "./fonts";
 import { FA, ICON_KEY } from "./fa";
+import { normUrl } from "./common";
 import type { IconKind, LayoutResult, RGB } from "./types";
 
 export interface PdfMeta {
@@ -96,6 +97,11 @@ function roundedRect(w: number, h: number, r: number): string {
 }
 
 function addLink(doc: PDFDocument, page: PDFPage, x1: number, y1: number, x2: number, y2: number, url: string) {
+  // The one gate every link passes: only http(s), mailto and tel reach the PDF. Anything else
+  // (javascript:, file:, data:...) becomes a harmless https:// address. Resumes arrive from
+  // shared links and imported files, so this can't trust what it's given.
+  url = normUrl(url);
+  if (!url) return;
   const annot = doc.context.obj({
     Type: "Annot",
     Subtype: "Link",

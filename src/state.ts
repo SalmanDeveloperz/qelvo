@@ -1,9 +1,10 @@
 // App state: one Resume, its source code, and which side last edited it.
-// Form edits regenerate the code; code edits re-parse into the model. Nothing
-// is persisted: by design, for now.
+// Form edits regenerate the code; code edits re-parse into the model. Drafts are
+// saved to the browser by src/persist/autosave.ts, which watches this store.
 import { useSyncExternalStore } from "react";
 import { emptyResume } from "./model/factory";
 import type { Resume } from "./model/types";
+import { newDraftId } from "./persist/drafts";
 import { parse, serialize, type Diagnostic, type LineMap } from "./source/latex";
 
 export type Screen = "landing" | "setup" | "editor";
@@ -20,6 +21,12 @@ export interface State {
   /** Depth of the undo / redo stacks (for the toolbar buttons). */
   canUndo: number;
   canRedo: number;
+  /** Which saved draft this document is. null = nothing worth saving yet (landing, setup). */
+  draftId: string | null;
+  /** Autosave status, shown in the editor's top bar. */
+  saveState: "saved" | "pending" | "error" | "off";
+  /** A one-off message for the editor to show (e.g. "Opened a shared resume"). */
+  notice: string | null;
 }
 
 const initial = emptyResume();
@@ -32,6 +39,9 @@ let state: State = {
   importVia: null,
   canUndo: 0,
   canRedo: 0,
+  draftId: null,
+  saveState: "saved",
+  notice: null,
 };
 const listeners = new Set<() => void>();
 
@@ -75,12 +85,22 @@ export const store = {
     set({ screen });
     window.scrollTo({ top: 0 });
   },
-  /** Replace the whole document (import, sample, template switch from setup). */
+  /** Start a new document (import, sample, from scratch). It becomes a new draft. */
   load(resume: Resume, notes: string[] = [], via: State["importVia"] = null) {
+    this.open(resume, newDraftId(), notes, via);
+  },
+  /** Open a document as a specific draft (restoring one, or a shared link). */
+  open(resume: Resume, draftId: string, notes: string[] = [], via: State["importVia"] = null, notice: string | null = null) {
     past.length = 0;
     future.length = 0;
     lastKey = "";
-    set({ resume, ...withCode(resume), codeDiagnostics: [], importNotes: notes, importVia: via, canUndo: 0, canRedo: 0 });
+    set({ resume, ...withCode(resume), codeDiagnostics: [], importNotes: notes, importVia: via, canUndo: 0, canRedo: 0, draftId, notice });
+  },
+  setSaveState(saveState: State["saveState"]) {
+    if (state.saveState !== saveState) set({ saveState });
+  },
+  notify(notice: string | null) {
+    set({ notice });
   },
   /**
    * Edit from the visual form or toolbar. `key` groups keystrokes into one undo

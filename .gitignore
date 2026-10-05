@@ -6,3 +6,5 @@ out
 fixtures
 tests/corpus
 .claude
+# Private working notes for the maintainer and their assistant
+memory.md
