@@ -9,6 +9,10 @@ import { FormPane } from "./FormPane";
 import { PdfView } from "./PdfView";
 import { download, fileBase } from "./pdf";
 import { SITE } from "../site";
+import { plain } from "../model/inline";
+
+/** "Muhammad Salman" → "Muhammad_Resume". Only changes when the first name does. */
+const headerName = (name: string) => `${plain(name).trim().split(/\s+/)[0]?.replace(/[^\p{L}\p{N}-]+/gu, "") || "My"}_Resume`;
 import { DraftsDialog, SaveBadge, ShareButton } from "./Share";
 import { ThemePicker } from "./theme";
 import { ICode, IDots, IDown, IDownload, IFile, IForm, IRedo, IUndo, IUp, IUpload, Logo } from "./icons";
@@ -64,7 +68,7 @@ export function Editor() {
     if (!r) return;
     setResult(r);
     download(r.pdf, `${fileBase(store.get().resume.name)}.pdf`, "application/pdf");
-    flash(`Downloaded · ${r.info.pageCount} page${r.info.pageCount > 1 ? "s" : ""} · ${(r.pdf.length / 1024).toFixed(0)} KB · real text, embedded fonts`);
+    flash(`Your PDF is ready ✨ ${r.info.pageCount} page${r.info.pageCount > 1 ? "s" : ""}, ${(r.pdf.length / 1024).toFixed(0)} KB, every word searchable. Good luck out there!`);
   }, [compiler, result]);
 
   useEffect(() => {
@@ -167,7 +171,7 @@ export function Editor() {
     <div className="editor" style={drag ? { userSelect: "none", cursor: "col-resize" } : undefined}>
       <header className="topbar">
         <button className="btn ghost sm" style={{ padding: "0 4px" }} onClick={() => store.go("landing")} title="Home (your draft is saved)"><Logo size={24} /></button>
-        <span className="file"><IFile size={14} /> {fileBase(resume.name)}.tex</span>
+        <span className="file" title="Saved in this browser"><IFile size={14} /> {headerName(resume.name)}</span>
         <SaveBadge />
         <span className="sep" />
         <label className="tsel"><span className="lbl">Layout</span>
@@ -187,11 +191,11 @@ export function Editor() {
           <button title="Redo (Ctrl+Y)" disabled={!canRedo} onClick={() => store.redo()}><IRedo size={14} /></button>
         </div>
         <span className="grow" />
-        <span className={`status ${statusCls}`} title={info ? `layout + PDF in ${info.ms.toFixed(0)} ms` : ""}>
-          <i className="led" />
-          {busy ? "compiling" : compileError ? "error" : info ? <>{`${info.pageCount}/${info.target} page${info.target > 1 ? "s" : ""} · ${Math.round(info.lastFill * 100)}%`}<span className="st-ms">{` · ${info.ms.toFixed(0)} ms`}</span></> : "…"}
+        {/* Keeps showing the last result while recompiling (busy just dims it), so its width never jumps. */}
+        <span className={`status ${statusCls}`} title={info ? `Typeset in ${info.ms.toFixed(0)} ms` : ""}>
+          {compileError ? "can't typeset this" : info ? <>{`${info.pageCount}/${info.target} page${info.target > 1 ? "s" : ""} · ${Math.round(info.lastFill * 100)}%`}<span className="st-full"> full</span></> : "typesetting…"}
         </span>
-        <ThemePicker />
+        <ThemePicker compact />
         <div className="menu-wrap">
           <button className="icon-btn" style={{ width: 34, height: 34 }} onClick={() => setMenu(!menu)} title="More"><IDots /></button>
           {menu && (

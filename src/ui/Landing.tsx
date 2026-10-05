@@ -3,7 +3,7 @@ import { TEMPLATE_META } from "../engine/meta";
 import type { TemplateId } from "../model/types";
 import { SITE } from "../site";
 import { store } from "../state";
-import { ICheck, IArrowRight, IGitHub, ILinkedIn, IXTwitter, Wordmark } from "./icons";
+import { IArrowRight, IGitHub, ILinkedIn, IXTwitter, Wordmark } from "./icons";
 import { presetTemplate } from "./Setup";
 import { ThemePicker } from "./theme";
 import { Thumb } from "./Thumb";
@@ -48,6 +48,19 @@ function SheetStack({ active, next, width, className, priority }: { active: Temp
   );
 }
 
+/** ", Muhammad" from a draft name, or nothing if there isn't a usable one. */
+const firstName = (name: string) => {
+  const f = name.trim().split(/\s+/)[0] ?? "";
+  return f && f !== "Untitled" ? `, ${f}` : "";
+};
+
+/** A hand-drawn underline that draws itself in once. */
+const Squiggle = () => (
+  <svg className="squiggle" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden>
+    <path d="M3 10 C 38 3, 64 15, 104 9 S 168 3, 208 9 S 268 15, 297 6" />
+  </svg>
+);
+
 export function Landing() {
   const typed = useTypewriter(LINE_TEXT);
   const front = LINES[typed.line].id;
@@ -89,25 +102,25 @@ export function Landing() {
             <span aria-hidden>{typed.text}</span>
             <span className="caret" aria-hidden />
           </h2>
-          <h1>Typeset,<br /><em>not templated.</em></h1>
+          <h1>Typeset,<br /><em className="squiggled">not templated.<Squiggle /></em></h1>
           <p className="lede">
-            Drop in the resume you already have, pick a layout, and download the exact PDF you see.
-            Four layouts, each measured against a real resume down to a hundredth of a point.
-            Edit it like code or like a form.
+            Bring the resume you already have (yes, even the messy one). Pick a look, tweak anything,
+            and download the exact PDF you see. Free forever, no sign-up, and no “upgrade to download”
+            waiting for you at the end.
           </p>
           <div className="ctas">
             <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Build my resume <IArrowRight /></button>
-            <button className="btn lg" onClick={() => jump("layouts")}>See the layouts</button>
+            <span className="margin-note">takes about two minutes ☕</span>
           </div>
           {recent && (
             <button className="continue" onClick={resume} onPointerEnter={warmCode}>
-              <span className="continue-k">Continue</span> <b>{recent.name}</b> <span className="faint">· edited {ago(recent.updated)}</span> <IArrowRight size={14} />
+              <span className="wave" aria-hidden>👋</span> Welcome back{firstName(recent.name)}. <b>Pick up where you left off</b> <span className="faint">· {ago(recent.updated)}</span> <IArrowRight size={14} />
             </button>
           )}
           <div className="promise">
-            <span><ICheck size={15} /> Free PDF, no watermark</span>
-            <span><ICheck size={15} /> No sign-up</span>
-            <span><ICheck size={15} /> Selectable text that ATS can read</span>
+            <span>🔒 Stays in your browser</span>
+            <span>✨ Free, for real</span>
+            <span>🤖 Every word readable by ATS</span>
           </div>
         </div>
         <div className="desk" aria-hidden>
@@ -121,15 +134,15 @@ export function Landing() {
       <section className="band" id="layouts">
         <div className="band-inner">
           <div className="band-head">
-            <h2>Four layouts. All of them strict.</h2>
-            <p className="sub">Margins, type sizes and spacing don't drift when your content changes. Switch between them any time; nothing you wrote is lost.</p>
+            <h2>Four looks. Zero fiddling.</h2>
+            <p className="sub">Each one was measured against a real resume, down to a hundredth of a point. Your words can change all they like; the spacing won't budge. Switch any time, nothing gets lost.</p>
           </div>
           <div className="gallery">
             {GALLERY.map((id, i) => (
               <button key={id} className="gcard" onClick={() => start(id)} style={{ animationDelay: `${i * 70}ms` }}>
                 <div className="gshot"><div className="paper"><Thumb id={id} width={250} lazy /></div></div>
                 <div className="gmeta">
-                  <h3>{TEMPLATE_META[id].name}<span className="go">Use this <IArrowRight size={14} /></span></h3>
+                  <h3>{TEMPLATE_META[id].name}<span className="go">Try this one <IArrowRight size={14} /></span></h3>
                   <p>{TEMPLATE_META[id].tagline}</p>
                 </div>
               </button>
@@ -142,12 +155,13 @@ export function Landing() {
         <div className="band-inner split-feature">
           <div>
             <h2>Write it like code.<br />Or don't.</h2>
-            <p className="sub">Every field in the form is a line of source on the other tab. Change either one and the PDF recompiles before you lift your fingers off the keys.</p>
-            <ul className="ticks">
-              <li><ICheck size={15} /> <span><b>Bold</b> and <i>italic</i> anywhere, including your name and headline</span></li>
-              <li><ICheck size={15} /> <span>Optional icons for LinkedIn, GitHub, X, website, phone and location</span></li>
-              <li><ICheck size={15} /> <span>Undo and redo across both views: <span className="kbd">Ctrl Z</span> <span className="kbd">Ctrl Y</span></span></li>
-              <li><ICheck size={15} /> <span>Click any line in the PDF to jump to it</span></li>
+            <p className="sub">Every field in the form is a line of source on the other tab. Change either one and the PDF updates before your fingers leave the keys.</p>
+            <ul className="ticks emoji">
+              <li><span className="e" aria-hidden>✍️</span> <span><b>Bold</b> or <i>italic</i> anything, even just your surname</span></li>
+              <li><span className="e" aria-hidden>💾</span> <span>Saves itself as you type. Close the tab, come back tomorrow, it's there</span></li>
+              <li><span className="e" aria-hidden>🔗</span> <span>Share it with one link. No upload, no account, nothing stored on a server</span></li>
+              <li><span className="e" aria-hidden>↩️</span> <span>Undo and redo everywhere: <span className="kbd">Ctrl Z</span> <span className="kbd">Ctrl Y</span></span></li>
+              <li><span className="e" aria-hidden>👆</span> <span>Click any line in the PDF and land right on it</span></li>
             </ul>
           </div>
           <pre className="code-mock" aria-label="Example resume source">
@@ -170,11 +184,11 @@ export function Landing() {
       <section className="band" id="how">
         <div className="band-inner">
           <h2>Three steps. None of them is “upgrade to download.”</h2>
-          <p className="sub">The preview is the PDF. You can download it at any point, as many times as you like.</p>
+          <p className="sub">The preview is the PDF. Download it whenever you like, as many times as you like.</p>
           <div className="steps">
-            <div className="step-card"><span className="n">01 · layout</span><h3>Pick one of four</h3><p>Geometric sans, blue small caps, classic single-column TeX, or two-column TeX. Each one keeps its spacing exactly.</p></div>
-            <div className="step-card"><span className="n">02 · length</span><h3>Say how many pages</h3><p>One, two or three. The typesetter tightens spacing just enough to land there, and tells you plainly if the content won't fit.</p></div>
-            <div className="step-card"><span className="n">03 · content</span><h3>Upload or type</h3><p>Your old PDF or DOCX is read with its layout, links and dates intact, then rewritten in ATS wording only if you ask.</p></div>
+            <div className="step-card"><span className="step-e" aria-hidden>🎨</span><span className="n">01 · look</span><h3>Pick one of four</h3><p>Clean geometric sans, blue small caps, classic TeX, or two-column TeX. Each keeps its spacing exactly.</p></div>
+            <div className="step-card"><span className="step-e" aria-hidden>📏</span><span className="n">02 · length</span><h3>Say how many pages</h3><p>One, two or three. Spacing tightens just enough to land there, and you'll hear about it plainly if it can't.</p></div>
+            <div className="step-card"><span className="step-e" aria-hidden>📄</span><span className="n">03 · your story</span><h3>Upload or type</h3><p>Your old PDF or Word file comes in with its dates, links and bullets intact. Reworded for ATS only if you ask.</p></div>
           </div>
         </div>
       </section>
@@ -189,9 +203,34 @@ export function Landing() {
             <div className="truth"><div className="q">Icons as font glyphs that parse as “”</div><div className="a">Icons are vector drawings. The text layer stays clean for applicant tracking systems.</div></div>
             <div className="truth"><div className="q">Squeeze everything onto one page</div><div className="a">Spacing tightens by up to 16%, type by up to 6%, and no further. Past that, it tells you what to cut.</div></div>
           </div>
+        </div>
+      </section>
+
+      <section className="band note-band">
+        <div className="band-inner">
+          <article className="maker-note">
+            <p className="hi">Hi, I'm Salman 👋</p>
+            <p>
+              I'm a backend engineer from Lahore, and I built Qelvo because making a good resume shouldn't cost
+              money, or a weekend of fighting LaTeX. So it's free, it's open source, and your resume stays in
+              your own browser.
+            </p>
+            <p>If it helps you land an interview, tell me. It honestly makes my day.</p>
+            <div className="sign">
+              <span className="signature">Salman</span>
+              <span className="sign-links">
+                <a href={SITE.author.github} target="_blank" rel="noreferrer" aria-label="GitHub"><IGitHub size={15} /></a>
+                <a href={SITE.author.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><ILinkedIn size={15} /></a>
+                <a href={SITE.author.twitter} target="_blank" rel="noreferrer" aria-label="X"><IXTwitter size={14} /></a>
+              </span>
+            </div>
+          </article>
           <div className="closer">
-            <h2>Start with the resume you already have.</h2>
-            <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Build my resume <IArrowRight /></button>
+            <div>
+              <h2>Go get that job.</h2>
+              <p className="sub" style={{ margin: "6px 0 0" }}>We're rooting for you 💛</p>
+            </div>
+            <button className="btn primary lg" onClick={() => start()} onPointerEnter={warmCode} onFocus={warmCode}>Let's do this <IArrowRight /></button>
           </div>
         </div>
       </section>

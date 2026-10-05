@@ -47,7 +47,7 @@ export function ShareButton() {
       {open && (
         <div className="share-pop" role="dialog" aria-label="Share link">
           <div className="share-head">
-            <b>{copied === "yes" ? <><ICheck size={14} /> Link copied</> : "Share a copy"}</b>
+            <b>{copied === "yes" ? <><ICheck size={14} /> Link copied, send it anywhere 💌</> : "Share a copy"}</b>
             <button className="icon-btn" onClick={() => setOpen(false)} aria-label="Close"><IX size={14} /></button>
           </div>
           <div className="share-row">

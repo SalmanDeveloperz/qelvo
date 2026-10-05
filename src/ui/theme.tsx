@@ -37,22 +37,35 @@ export function applyTheme(t: ThemeId) {
   try { localStorage.setItem(KEY, t); } catch { /* ignore */ }
 }
 
-/** A compact swatch button that opens the five themes. */
-export function ThemePicker() {
+const HINTED = "qelvo-theme-hinted";
+const hinted = () => { try { return localStorage.getItem(HINTED) === "1"; } catch { return true; } };
+const markHinted = () => { try { localStorage.setItem(HINTED, "1"); } catch { /* ignore */ } };
+
+/**
+ * The five moods as a row of dots, so it's obvious there's more than one. `compact` (the
+ * editor's crowded top bar) shows the current mood and opens the row on click. On a first
+ * visit the dots do one small wave after a few seconds; it never happens again.
+ */
+export function ThemePicker({ compact = false }: { compact?: boolean }) {
   const [theme, setTheme] = useState<ThemeId>(() => (document.documentElement.dataset.theme as ThemeId) || initialTheme());
   const [open, setOpen] = useState(false);
   const [pop, setPop] = useState<{ id: ThemeId; n: number } | null>(null);
+  const [hint, setHint] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const btn = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (!pop) return;
-    // Restart the bounce on the same element (re-adding the class after a reflow).
-    const b = btn.current;
-    if (b) { b.classList.remove("boing"); void b.offsetWidth; b.classList.add("boing"); }
     const t = window.setTimeout(() => setPop(null), 1900);
     return () => window.clearTimeout(t);
   }, [pop]);
+  useEffect(() => {
+    if (compact || hinted()) return;
+    const show = window.setTimeout(() => { setHint(true); markHinted(); }, 4500);
+    const hide = window.setTimeout(() => setHint(false), 9000);
+    return () => { window.clearTimeout(show); window.clearTimeout(hide); };
+  }, [compact]);
   const pick = (id: ThemeId) => {
+    markHinted();
+    setHint(false);
     setTheme(id);
     setOpen(false);
     setPop((p) => ({ id, n: (p?.n ?? 0) + 1 }));
@@ -65,20 +78,25 @@ export function ThemePicker() {
     return () => window.removeEventListener("mousedown", close);
   }, [open]);
   const cur = THEMES.find((t) => t.id === theme)!;
+  const dots = (
+    <div className={`theme-dots ${hint ? "hint" : ""}`} role="radiogroup" aria-label="Colour mood">
+      {THEMES.map((t, i) => (
+        <button key={t.id} role="radio" aria-checked={t.id === theme} aria-label={`${t.label} mood`} data-label={t.label}
+          className={`dot ${t.id === theme ? "on" : ""}`} style={{ "--i": i } as React.CSSProperties} onClick={() => pick(t.id)}>
+          <Swatch s={t.swatch} />
+        </button>
+      ))}
+    </div>
+  );
   return (
-    <div className="theme-picker" ref={ref}>
-      <button ref={btn} className="theme-btn" onClick={() => setOpen(!open)} title={`Theme: ${cur.label}`} aria-label="Change theme">
-        <Swatch s={cur.swatch} />
-      </button>
-      {open && (
-        <div className="theme-menu" role="menu">
-          {THEMES.map((t) => (
-            <button key={t.id} role="menuitemradio" aria-checked={t.id === theme} className={t.id === theme ? "on" : ""} onClick={() => pick(t.id)}>
-              <Swatch s={t.swatch} /> {t.label}
-            </button>
-          ))}
-        </div>
-      )}
+    <div className={`theme-picker ${compact ? "compact" : ""}`} ref={ref}>
+      {compact ? (
+        <button className="theme-btn" onClick={() => setOpen(!open)} title={`Mood: ${cur.label}. Click for others`} aria-label="Change colour mood" aria-expanded={open}>
+          <Swatch s={cur.swatch} />
+        </button>
+      ) : dots}
+      {compact && open && <div className="theme-menu">{dots}</div>}
+      {hint && <span className="theme-hint" aria-hidden>psst, five moods to pick from</span>}
       {pop && !open && (
         <div key={pop.n} className="theme-pop" role="status">
           <Swatch s={THEMES.find((t) => t.id === pop.id)!.swatch} />

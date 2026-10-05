@@ -47,8 +47,8 @@ export function Setup() {
       <main className="setup">
         {step === 0 && (
           <>
-            <h2>Pick the layout.</h2>
-            <p className="sub">These are strict. Whatever you put in, the margins, type sizes and rhythm stay exactly as designed. Switch any time later; your content carries over.</p>
+            <h2>Pick a look you like.</h2>
+            <p className="sub">Every one of these is strict: margins, sizes and rhythm stay put no matter what you write. Not sure? Pick any. You can switch later and your words come along.</p>
             <div className="cards">
               {ORDER.map((id) => (
                 <button key={id} className={`tcard ${template === id ? "on" : ""}`} onClick={() => setTemplate(id)} onDoubleClick={() => { setTemplate(id); setStep(1); }}>
@@ -71,7 +71,7 @@ export function Setup() {
         {step === 1 && (
           <>
             <h2>How long should it be?</h2>
-            <p className="sub">The typesetter will land on exactly this many pages, tightening spacing a little if it has to. It won't shrink your text into something unreadable to get there.</p>
+            <p className="sub">We'll land on exactly this many pages, nudging the spacing a little if we have to. We won't shrink your words to ant size to get there 🐜</p>
             <div className="pages">
               {([
                 [1, "One page", "Students, new grads, most engineers under ~8 years.", "What most recruiters expect. The six-second skim happens here."],
@@ -110,10 +110,10 @@ export function Setup() {
 }
 
 const STAGES: { key: Stage; label: string }[] = [
-  { key: "reading", label: "Reading the file" },
-  { key: "layout", label: "Recovering layout, columns, links and dates" },
-  { key: "ai", label: "Structuring every section and bullet" },
-  { key: "done", label: "Typesetting into your layout" },
+  { key: "reading", label: "Opening your file" },
+  { key: "layout", label: "Finding your dates, links and bullets" },
+  { key: "ai", label: "Putting every section in its place" },
+  { key: "done", label: "Typesetting it nicely" },
 ];
 
 function ContentStep({ template, pages, paper, back }: { template: TemplateId; pages: PageTarget; paper: Paper; back: () => void }) {
@@ -153,7 +153,7 @@ function ContentStep({ template, pages, paper, back }: { template: TemplateId; p
   const stageIdx = busy ? Math.max(0, STAGES.findIndex((s) => s.key === (busy.stage === "local" ? "ai" : busy.stage))) : -1;
   return (
     <>
-      <h2>Bring your content.</h2>
+      <h2>Now, bring your story.</h2>
       <p className="sub">Upload the resume you already have and it lands in <b style={{ color: "var(--text)" }}>{TEMPLATES[template].name}</b>, {pages} page{pages > 1 ? "s" : ""}, every bullet and link intact. Or start clean with just the essentials.</p>
       <div className="sources">
         {busy ? (
@@ -177,8 +177,8 @@ function ContentStep({ template, pages, paper, back }: { template: TemplateId; p
           >
             <div>
               <IUpload size={30} color="var(--accent)" />
-              <h3>Drop your current resume</h3>
-              <p>or click to choose a file</p>
+              <h3>Drop your old resume here 📄</h3>
+              <p>or click to find it. Messy ones welcome.</p>
               <div className="types"><span>PDF</span><span>DOCX</span><span>TXT</span></div>
               {SITE.aiImport && <div className="mode" onClick={(e) => e.stopPropagation()}>
                 <button className={`radio ${mode === "exact" ? "on" : ""}`} onClick={() => setMode("exact")}>
@@ -194,18 +194,18 @@ function ContentStep({ template, pages, paper, back }: { template: TemplateId; p
         )}
         <div className="side-opts">
           <button className="opt" onClick={() => setQuick(true)} disabled={!!busy}>
-            <h4><IPen size={15} /> &nbsp;Start from scratch</h4>
-            <p>Six fields to get the header right, then fill sections in the editor. Empty sections stay out of the PDF.</p>
+            <h4><IPen size={15} /> &nbsp;Start fresh ✏️</h4>
+            <p>Six quick fields for the top of the page, then fill in the rest with the PDF updating next to you. Empty sections stay out of the PDF.</p>
           </button>
           <button className="opt" onClick={sample} disabled={!!busy}>
-            <h4><IFile size={15} /> &nbsp;Open the reference sample</h4>
-            <p>The exact resume this layout was calibrated against. Good for seeing how the editor works.</p>
+            <h4><IFile size={15} /> &nbsp;Peek at a sample 👀</h4>
+            <p>The real resume this layout was measured against. A nice way to poke around before writing your own.</p>
           </button>
           <div className="opt" style={{ cursor: "default" }}>
-            <h4><ISpark size={15} /> &nbsp;What happens to my file?</h4>
+            <h4><ISpark size={15} /> &nbsp;What happens to my file? 🔒</h4>
             {SITE.aiImport
               ? <p>Layout extraction runs in your browser. For structuring, the text (and the PDF itself) is sent once to Claude and not stored by this app. Without an AI key, an offline parser is used instead.</p>
-              : <p>Nothing is uploaded. Your file is read, parsed and typeset entirely in this browser tab, and it's gone when you close it.</p>}
+              : <p>Nothing gets uploaded. Your file is read and typeset right here in this tab, and your draft is saved only in this browser. Not on our servers. We don't even have any.</p>}
           </div>
         </div>
       </div>
@@ -249,8 +249,8 @@ function QuickStart({ template, pages, paper, back }: { template: TemplateId; pa
   };
   return (
     <>
-      <h2>The essentials.</h2>
-      <p className="sub">Everything else gets filled in the editor, with the PDF updating beside you.</p>
+      <h2>Let's start with you.</h2>
+      <p className="sub">Just the top of the page for now. Everything else happens in the editor, with your PDF updating right beside you.</p>
       <div className="opt" style={{ cursor: "default", maxWidth: 720 }}>
         <div className="quick">
           {QUICK.map((q) => (
