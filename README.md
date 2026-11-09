@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <b>A resume builder with a real typesetter.</b><br>
+  <b>A resume builder with a real typesetter</b><br>
   The preview is the PDF. Free, no sign-up, no watermark, MIT licensed.
 </p>
 
