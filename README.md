@@ -66,7 +66,7 @@ your file ──► extract (pdf.js / mammoth) ──► parse (offline, or Clau
 
 Compiles run off the main thread and take a few tens of milliseconds, so the preview keeps up with your typing.
 
-## Layouts
+## Layouts:
 
 | Layout | Type | Columns | Calibrated against |
 |---|---|---|---|
